@@ -11,7 +11,8 @@ class TransactionsPage {
    * через registerEvents()
    * */
   constructor( element ) {
-
+    this.element = element;
+    this.registerEvents();
   }
 
   /**
@@ -28,7 +29,9 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
-
+    this.element.querySelector('.remove-account').onclick = e => {
+      this.removeAccount();
+    }
   }
 
   /**
@@ -41,7 +44,13 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
-
+    Account.remove({ id: 1}, (err, resp) => {
+      if (resp && resp.success) {
+        App.updateWidgets();
+        App.updateForms();
+        this.clear();
+      }
+    })
   }
 
   /**
