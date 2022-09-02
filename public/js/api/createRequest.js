@@ -11,12 +11,9 @@ const createRequest = (options = {}) => {
   const formData = new FormData();
   if (options.data) {
     if (options.method === "GET") {
-      url +=
-        "?" +
-        Object.entries(options.data).map(
-          ([key, value]) =>
+      url += "?" + Object.entries(options.data).map(([key, value]) =>
             `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-        );
+        ).join('&');
     } else {
         Object.entries(options.data).forEach(v => formData.append(...v));
     }
