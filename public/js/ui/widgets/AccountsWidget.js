@@ -3,6 +3,8 @@
  * отображения счетов в боковой колонке
  * */
 
+// const { application } = require("express");
+
 class AccountsWidget {
   /**
    * Устанавливает текущий элемент в свойство element
@@ -15,6 +17,9 @@ class AccountsWidget {
    * */
   constructor(element) {
     this.element = element;
+    if (element === undefined) {
+      err = new Error 
+    };
     this.registerEvents();
     this.update();
   }
@@ -26,7 +31,17 @@ class AccountsWidget {
    * (которые отображены в боковой колонке),
    * вызывает AccountsWidget.onSelectAccount()
    * */
-  registerEvents() {}
+  registerEvents() {
+    const accounts = document.querySelector('.accounts-panel');
+    accounts.onclick = (event) => {
+      if (event.target.classList.contains('create-account')) {
+          App.getModal('createAccount').open();        
+      } else if (event.target.closest('.account')) {
+        this.onSelectAccount(event.target.closest('.account'));
+      }
+  }      
+      
+  }
 
   /**
    * Метод доступен только авторизованным пользователям
@@ -55,7 +70,7 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    this.element.querySelectorAll('.account').forEach(e => e.remove())
+    this.element.querySelectorAll('.account').forEach(e => e.remove());
   }
 
   /**
@@ -66,7 +81,12 @@ class AccountsWidget {
    * Вызывает App.showPage( 'transactions', { account_id: id_счёта });
    * */
   onSelectAccount(element) {
-
+    document.querySelectorAll('.account').forEach(element => {
+      element.classList.remove('active')
+    });
+    element.classList.add('active');
+    App.showPage( 'transactions', { account_id: element.getAttribute("data-id") });
+  
   }
 
   /**
@@ -78,7 +98,7 @@ class AccountsWidget {
     return `<li class="account" data-id="${item.id}">
               <a href="#">
                   <span>${item.name}</span> /
-                   <span>${item.sum}</span>
+                   <span>${this.divideNumberByPieces(item.sum)} &#x20bd</span>
               </a>
              </li>`;
   }
@@ -92,4 +112,9 @@ class AccountsWidget {
   renderItem(data) {
     this.element.insertAdjacentHTML('beforeEnd', this.getAccountHTML(data))
   }
+
+  divideNumberByPieces(x, delimiter) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, delimiter || ",");
+  };
+
 }

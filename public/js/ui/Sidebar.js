@@ -17,7 +17,22 @@ class Sidebar {
    * переключает два класса для body: sidebar-open и sidebar-collapse
    * при нажатии на кнопку .sidebar-toggle
    * */
-  static initToggleButton() {}
+  static initToggleButton() {
+    const sideBarBtn = document.querySelector('.sidebar-toggle');
+    const bodyTag = document.querySelector('body');
+    sideBarBtn.addEventListener('click', () => {
+      if (bodyTag.classList.contains('sidebar-open')) {
+        bodyTag.classList.remove('sidebar-open');
+        bodyTag.classList.remove('sidebar-collapse');
+      } else {
+        bodyTag.classList.add('sidebar-open');
+        bodyTag.classList.add('sidebar-collapse');
+      }
+      
+    })
+
+
+  }
 
   /**
    * При нажатии на кнопку входа, показывает окно входа
@@ -40,5 +55,11 @@ class Sidebar {
         }
       });
     };
+
+    document.querySelector(".menu-item_register > a").onclick = (e) => {
+      e.preventDefault();
+      App.getModal("register").open();
+    };
+
   }
 }
